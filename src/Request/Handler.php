@@ -12,9 +12,10 @@
 namespace Xabbuh\XApi\Client\Request;
 
 use Http\Client\Exception;
-use Http\Client\HttpClient;
 use Http\Message\RequestFactory;
 
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Xabbuh\XApi\Common\Exception\AccessDeniedException;
 use Xabbuh\XApi\Common\Exception\ConflictException;
@@ -34,12 +35,12 @@ final class Handler implements HandlerInterface
     private $version;
 
     /**
-     * @param HttpClient     $httpClient     The HTTP client sending requests to the remote LRS
-     * @param RequestFactory $requestFactory The factory used to create PSR-7 HTTP requests
-     * @param string         $baseUri        The APIs base URI (all end points will be created relatively to this URI)
-     * @param string         $version        The xAPI version
+     * @param ClientInterface $httpClient The HTTP client sending requests to the remote LRS
+     * @param RequestFactoryInterface $requestFactory The factory used to create PSR-7 HTTP requests
+     * @param string $baseUri The APIs base URI (all end points will be created relatively to this URI)
+     * @param string $version The xAPI version
      */
-    public function __construct(HttpClient $httpClient, RequestFactory $requestFactory, $baseUri, $version)
+    public function __construct(ClientInterface $httpClient, RequestFactoryInterface $requestFactory, $baseUri, $version)
     {
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory;
