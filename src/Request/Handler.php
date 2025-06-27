@@ -14,6 +14,7 @@ namespace Xabbuh\XApi\Client\Request;
 use Http\Client\Exception;
 use Http\Client\HttpClient;
 use Http\Message\RequestFactory;
+
 use Psr\Http\Message\RequestInterface;
 use Xabbuh\XApi\Common\Exception\AccessDeniedException;
 use Xabbuh\XApi\Common\Exception\ConflictException;
