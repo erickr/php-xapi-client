@@ -18,11 +18,11 @@ use ApiClients\Tools\Psr7\Oauth1\Definition\TokenSecret;
 use ApiClients\Tools\Psr7\Oauth1\RequestSigning\RequestSigner;
 use Http\Client\Common\Plugin\AuthenticationPlugin;
 use Http\Client\Common\PluginClient;
-use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\Authentication\BasicAuth;
-use Http\Message\RequestFactory;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use Xabbuh\Http\Authentication\OAuth1;
 use Xabbuh\XApi\Client\Request\Handler;
 use Xabbuh\XApi\Serializer\SerializerFactoryInterface;
@@ -39,12 +39,12 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
     private $serializerFactory;
 
     /**
-     * @var HttpClient|null
+     * @var ClientInterface|null
      */
     private $httpClient;
 
     /**
-     * @var RequestFactory|null
+     * @var RequestFactoryInterface|null
      */
     private $requestFactory;
 
@@ -65,7 +65,7 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function setHttpClient(HttpClient $httpClient)
+    public function setHttpClient(ClientInterface $httpClient)
     {
         $this->httpClient = $httpClient;
 
@@ -75,7 +75,7 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function setRequestFactory(RequestFactory $requestFactory)
+    public function setRequestFactory(RequestFactoryInterface $requestFactory)
     {
         $this->requestFactory = $requestFactory;
 

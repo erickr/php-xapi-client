@@ -11,8 +11,8 @@
 
 namespace Xabbuh\XApi\Client;
 
-use Http\Client\HttpClient;
-use Http\Message\RequestFactory;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 
 /**
  * xAPI client builder.
@@ -24,20 +24,20 @@ interface XApiClientBuilderInterface
     /**
      * Sets the HTTP client implementation that will be used to issue HTTP requests.
      *
-     * @param HttpClient $httpClient The HTTP client implementation
+     * @param ClientInterface $httpClient The HTTP client implementation
      *
      * @return XApiClientBuilderInterface The builder
      */
-    public function setHttpClient(HttpClient $httpClient);
+    public function setHttpClient(ClientInterface $httpClient);
 
     /**
      * Sets the requests factory which creates requests that are then handled by the HTTP client.
      *
-     * @param RequestFactory $requestFactory The request factory
+     * @param RequestFactoryInterface $requestFactory The request factory
      *
      * @return XApiClientBuilderInterface The builder
      */
-    public function setRequestFactory(RequestFactory $requestFactory);
+    public function setRequestFactory(RequestFactoryInterface $requestFactory);
 
     /**
      * Sets the LRS base URL.
