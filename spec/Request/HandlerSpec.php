@@ -2,7 +2,6 @@
 
 namespace spec\Xabbuh\XApi\Client\Request;
 
-use Http\Message\RequestFactory;
 use PhpSpec\ObjectBehavior;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
