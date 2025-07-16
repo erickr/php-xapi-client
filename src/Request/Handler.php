@@ -53,6 +53,7 @@ final class Handler implements HandlerInterface
      */
     public function createRequest($method, $uri, array $urlParameters = array(), $body = null, array $headers = array())
     {
+
         if (!in_array(strtoupper($method), array('GET', 'POST', 'PUT', 'DELETE'))) {
             throw new \InvalidArgumentException(sprintf('"%s" is no valid HTTP method (expected one of [GET, POST, PUT, DELETE]) in an xAPI context.', $method));
         }
@@ -71,7 +72,23 @@ final class Handler implements HandlerInterface
             $headers['Content-Type'] = 'application/json';
         }
 
-        return $this->requestFactory->createRequest(strtoupper($method), $uri, $headers, $body);
+        $request = $this->requestFactory->createRequest(strtoupper($method), $uri);
+
+        // Add headers to the request
+        foreach ($headers as $name => $value) {
+            $request = $request->withHeader($name, $value);
+        }
+
+        // Add body to the request if it exists
+        if (null !== $body) {
+            // Create a stream for the body
+            $stream = $request->getBody();
+            $stream->write($body);
+            $stream->rewind();
+            $request = $request->withBody($stream);
+        }
+
+        return $request;
     }
 
     /**

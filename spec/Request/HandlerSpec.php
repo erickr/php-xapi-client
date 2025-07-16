@@ -28,10 +28,11 @@ class HandlerSpec extends ObjectBehavior
         RequestFactoryInterface $requestFactory,
         RequestInterface $request
     ) {
-        $requestFactory->createRequest('GET', 'http://example.com/xapi/statements', array(
-            'X-Experience-API-Version' => '1.0.1',
-            'Content-Type' => 'application/json',
-        ), null)->willReturn($request);
+        $requestFactory->createRequest('GET', 'http://example.com/xapi/statements')->willReturn($request);
+        $request->withHeader('X-Experience-API-Version', '1.0.1')->willReturn($request);
+        $request->withHeader('Content-Type', 'application/json')->willReturn($request);
+        $request->getBody()->willReturn($request);
+        $request->withBody($request)->willReturn($request);
 
         $this->createRequest('get', '/statements')->shouldReturn($request);
         $this->createRequest('GET', '/statements')->shouldReturn($request);
@@ -39,12 +40,16 @@ class HandlerSpec extends ObjectBehavior
 
     function it_returns_post_request_created_by_the_http_client(
         RequestFactoryInterface $requestFactory,
-        RequestInterface $request
+        RequestInterface $request,
+        \Psr\Http\Message\StreamInterface $stream
     ) {
-        $requestFactory->createRequest('POST', 'http://example.com/xapi/statements', array(
-            'X-Experience-API-Version' => '1.0.1',
-            'Content-Type' => 'application/json',
-        ), 'body')->willReturn($request);
+        $requestFactory->createRequest('POST', 'http://example.com/xapi/statements')->willReturn($request);
+        $request->withHeader('X-Experience-API-Version', '1.0.1')->willReturn($request);
+        $request->withHeader('Content-Type', 'application/json')->willReturn($request);
+        $request->getBody()->willReturn($stream);
+        $stream->write('body')->willReturn($stream);
+        $stream->rewind()->willReturn($stream);
+        $request->withBody($stream)->willReturn($request);
 
         $this->createRequest('post', '/statements', array(), 'body')->shouldReturn($request);
         $this->createRequest('POST', '/statements', array(), 'body')->shouldReturn($request);
@@ -52,12 +57,16 @@ class HandlerSpec extends ObjectBehavior
 
     function it_returns_put_request_created_by_the_http_client(
         RequestFactoryInterface $requestFactory,
-        RequestInterface $request
+        RequestInterface $request,
+        \Psr\Http\Message\StreamInterface $stream
     ) {
-        $requestFactory->createRequest('PUT', 'http://example.com/xapi/statements', array(
-            'X-Experience-API-Version' => '1.0.1',
-            'Content-Type' => 'application/json',
-        ), 'body')->willReturn($request);
+        $requestFactory->createRequest('PUT', 'http://example.com/xapi/statements')->willReturn($request);
+        $request->withHeader('X-Experience-API-Version', '1.0.1')->willReturn($request);
+        $request->withHeader('Content-Type', 'application/json')->willReturn($request);
+        $request->getBody()->willReturn($stream);
+        $stream->write('body')->willReturn($stream);
+        $stream->rewind()->willReturn($stream);
+        $request->withBody($stream)->willReturn($request);
 
         $this->createRequest('put', '/statements', array(), 'body')->shouldReturn($request);
         $this->createRequest('PUT', '/statements', array(), 'body')->shouldReturn($request);
@@ -67,10 +76,11 @@ class HandlerSpec extends ObjectBehavior
         RequestFactoryInterface $requestFactory,
         RequestInterface $request
     ) {
-        $requestFactory->createRequest('DELETE', 'http://example.com/xapi/statements', array(
-            'X-Experience-API-Version' => '1.0.1',
-            'Content-Type' => 'application/json',
-        ), null)->willReturn($request);
+        $requestFactory->createRequest('DELETE', 'http://example.com/xapi/statements')->willReturn($request);
+        $request->withHeader('X-Experience-API-Version', '1.0.1')->willReturn($request);
+        $request->withHeader('Content-Type', 'application/json')->willReturn($request);
+        $request->getBody()->willReturn($request);
+        $request->withBody($request)->willReturn($request);
 
         $this->createRequest('delete', '/statements')->shouldReturn($request);
         $this->createRequest('DELETE', '/statements')->shouldReturn($request);
