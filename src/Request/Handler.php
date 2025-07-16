@@ -12,8 +12,6 @@
 namespace Xabbuh\XApi\Client\Request;
 
 use Http\Client\Exception;
-use Http\Message\RequestFactory;
-
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
@@ -40,8 +38,12 @@ final class Handler implements HandlerInterface
      * @param string $baseUri The APIs base URI (all end points will be created relatively to this URI)
      * @param string $version The xAPI version
      */
-    public function __construct(ClientInterface $httpClient, RequestFactoryInterface $requestFactory, $baseUri, $version)
-    {
+    public function __construct(
+        ClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        $baseUri,
+        $version
+    ) {
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory;
         $this->baseUri = $baseUri;
@@ -53,15 +55,19 @@ final class Handler implements HandlerInterface
      */
     public function createRequest($method, $uri, array $urlParameters = array(), $body = null, array $headers = array())
     {
-
         if (!in_array(strtoupper($method), array('GET', 'POST', 'PUT', 'DELETE'))) {
-            throw new \InvalidArgumentException(sprintf('"%s" is no valid HTTP method (expected one of [GET, POST, PUT, DELETE]) in an xAPI context.', $method));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    '"%s" is no valid HTTP method (expected one of [GET, POST, PUT, DELETE]) in an xAPI context.',
+                    $method
+                )
+            );
         }
 
-        $uri = rtrim($this->baseUri, '/').'/'.ltrim($uri, '/');
+        $uri = rtrim($this->baseUri, '/') . '/' . ltrim($uri, '/');
 
         if (count($urlParameters) > 0) {
-            $uri .= '?'.http_build_query($urlParameters);
+            $uri .= '?' . http_build_query($urlParameters);
         }
 
         if (!isset($headers['X-Experience-API-Version'])) {
@@ -105,17 +111,17 @@ final class Handler implements HandlerInterface
         // catch some common errors
         if (in_array($response->getStatusCode(), array(401, 403))) {
             throw new AccessDeniedException(
-                (string) $response->getBody(),
+                (string)$response->getBody(),
                 $response->getStatusCode()
             );
         } elseif (404 === $response->getStatusCode()) {
-            throw new NotFoundException((string) $response->getBody());
+            throw new NotFoundException((string)$response->getBody());
         } elseif (409 === $response->getStatusCode()) {
-            throw new ConflictException((string) $response->getBody());
+            throw new ConflictException((string)$response->getBody());
         }
 
         if (!in_array($response->getStatusCode(), $validStatusCodes)) {
-            throw new XApiException((string) $response->getBody(), $response->getStatusCode());
+            throw new XApiException((string)$response->getBody(), $response->getStatusCode());
         }
 
         return $response;

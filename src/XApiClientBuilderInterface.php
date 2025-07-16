@@ -70,10 +70,10 @@ interface XApiClientBuilderInterface
     /**
      * Sets OAuth credentials.
      *
-     * @param string $consumerKey    The consumer key
+     * @param string $consumerKey The consumer key
      * @param string $consumerSecret The consumer secret
-     * @param string $token          The token
-     * @param string $tokenSecret    The secret token
+     * @param string $token The token
+     * @param string $tokenSecret The secret token
      *
      * @return XApiClientBuilderInterface The builder
      */
