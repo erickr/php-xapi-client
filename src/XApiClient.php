@@ -13,7 +13,6 @@ namespace Xabbuh\XApi\Client;
 
 use Xabbuh\XApi\Client\Api\ActivityProfileApiClient;
 use Xabbuh\XApi\Client\Api\AgentProfileApiClient;
-use Xabbuh\XApi\Client\Api\ApiClient;
 use Xabbuh\XApi\Client\Api\StateApiClient;
 use Xabbuh\XApi\Client\Api\StatementsApiClient;
 use Xabbuh\XApi\Client\Request\HandlerInterface;
@@ -32,12 +31,15 @@ final class XApiClient implements XApiClientInterface
     private $serializerRegistry;
 
     /**
-     * @param HandlerInterface            $requestHandler     The HTTP request handler
+     * @param HandlerInterface $requestHandler The HTTP request handler
      * @param SerializerRegistryInterface $serializerRegistry The serializer registry
-     * @param string                      $version            The xAPI version
+     * @param string $version The xAPI version
      */
-    public function __construct(HandlerInterface $requestHandler, SerializerRegistryInterface $serializerRegistry, $version)
-    {
+    public function __construct(
+        HandlerInterface $requestHandler,
+        SerializerRegistryInterface $serializerRegistry,
+        $version
+    ) {
         $this->requestHandler = $requestHandler;
         $this->serializerRegistry = $serializerRegistry;
         $this->version = $version;
