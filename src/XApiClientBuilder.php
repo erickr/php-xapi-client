@@ -18,8 +18,8 @@ use ApiClients\Tools\Psr7\Oauth1\Definition\TokenSecret;
 use ApiClients\Tools\Psr7\Oauth1\RequestSigning\RequestSigner;
 use Http\Client\Common\Plugin\AuthenticationPlugin;
 use Http\Client\Common\PluginClient;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use Http\Message\Authentication\BasicAuth;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -131,9 +131,9 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
      */
     public function build()
     {
-        if (null === $this->httpClient && class_exists(HttpClientDiscovery::class)) {
+        if (null === $this->httpClient && class_exists(Psr18ClientDiscovery::class)) {
             try {
-                $this->httpClient = HttpClientDiscovery::find();
+                $this->httpClient = Psr18ClientDiscovery::find();
             } catch (\Exception $e) {
             }
         }
@@ -142,9 +142,9 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
             throw new \LogicException('No HTTP client was configured.');
         }
 
-        if (null === $this->requestFactory && class_exists(MessageFactoryDiscovery::class)) {
+        if (null === $this->requestFactory && class_exists(Psr17FactoryDiscovery::class)) {
             try {
-                $this->requestFactory = MessageFactoryDiscovery::find();
+                $this->requestFactory = Psr17FactoryDiscovery::findRequestFactory();
             } catch (\Exception $e) {
             }
         }
@@ -171,11 +171,18 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
 
         if (null !== $this->consumerKey && null !== $this->consumerSecret && null !== $this->accessToken && null !== $this->tokenSecret) {
             if (!class_exists(OAuth1::class)) {
-                throw new \LogicException('The "xabbuh/oauth1-authentication package is needed to use OAuth1 authorization.');
+                throw new \LogicException(
+                    'The "xabbuh/oauth1-authentication package is needed to use OAuth1 authorization.'
+                );
             }
 
-            $requestSigner = new RequestSigner(new ConsumerKey($this->consumerKey), new ConsumerSecret($this->consumerSecret));
-            $oauth = new OAuth1($requestSigner, new AccessToken($this->accessToken), new TokenSecret($this->tokenSecret));
+            $requestSigner = new RequestSigner(
+                new ConsumerKey($this->consumerKey),
+                new ConsumerSecret($this->consumerSecret)
+            );
+            $oauth = new OAuth1(
+                $requestSigner, new AccessToken($this->accessToken), new TokenSecret($this->tokenSecret)
+            );
             $plugins[] = new AuthenticationPlugin($oauth);
         }
 

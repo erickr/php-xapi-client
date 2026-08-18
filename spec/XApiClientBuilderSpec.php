@@ -3,7 +3,7 @@
 namespace spec\Xabbuh\XApi\Client;
 
 use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\Psr17FactoryDiscovery;
 use PhpSpec\Exception\Example\SkippingException;
 use PhpSpec\ObjectBehavior;
 use Psr\Http\Client\ClientInterface;
@@ -151,7 +151,7 @@ class XApiClientBuilderSpec extends ObjectBehavior
     private function isAbleToDiscoverRequestFactory()
     {
         try {
-            MessageFactoryDiscovery::find();
+            Psr17FactoryDiscovery::findRequestFactory();
 
             return true;
         } catch (\Exception $e) {
